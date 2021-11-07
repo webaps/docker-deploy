@@ -1,0 +1,40 @@
+name: Docker Deploy
+author: Nick Verschoor <nick@webaps.io>
+description: Zero-downtime deployments to docker over ssh
+inputs:
+  docker_host:
+    description: Remote Docker host (user@host)
+    required: true
+  docker_port:
+    description: Remote Docker host ssh port
+    default: 22
+  ssh_private_key:
+    description: Remote Docker SSH public key
+    required: true
+  ssh_public_host_key:
+    description: SSH private key used to connect to the docker host
+    required: true
+  args:
+    description: Deployment command arguments (docker-compose ...)
+    required: true
+  pre_deploy_command:
+    description: Command to run before deployment
+    required: false
+  deploy_path:
+    description: The path where the files will be copied to
+    required: true
+  pull_images:
+    description: Pull docker images before deploying.
+    required: false
+  docker_compose_file:
+    description: Docker compose file to deploy
+    required: false
+    default: docker-compose.yml
+
+runs:
+  using: docker
+  image: Dockerfile
+
+branding:
+  icon: send
+  color: green
