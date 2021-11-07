@@ -4,13 +4,6 @@ set -eu
 color_yellow='\033[33;1m'
 color_reset='\033[0m'
 
-SSH_COMMAND="ssh -q -t -i $HOME/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $INPUT_DOCKER_HOST"
-
-execute_ssh(){
-  echo "$INPUT_DOCKER_HOST: $@"
-  $SSH_COMMAND "$@"
-}
-
 if [ -z "$INPUT_DOCKER_HOST" ]; then
     echo "Input docker_host is required!"
     exit 1
@@ -36,6 +29,13 @@ if [ -z "$INPUT_DEPLOY_PATH" ]; then
     exit 1
 fi
 
+SSH_COMMAND="ssh -q -t -i $HOME/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $INPUT_DOCKER_HOST"
+
+execute_ssh(){
+  echo "$INPUT_DOCKER_HOST: $@"
+  $SSH_COMMAND "$@"
+}
+
 
 # Setup SSH key
 SSH_HOST=${INPUT_DOCKER_HOST#*@}
@@ -55,7 +55,7 @@ printf '%s %s\n' "$SSH_HOST" "$INPUT_SSH_PUBLIC_HOST_KEY" > /etc/ssh/ssh_known_h
 echo -e "${color_yellow}> Creating destination folder${color_reset}"
 execute_ssh "mkdir -p $INPUT_DEPLOY_PATH || true"
 
-echo -e "${color_yellow}> Transfer files to destination folder${color_reset} \n rsync -rzh --delete --rsync-path="sudo rsync" --info=progress2 ./ $INPUT_DOCKER_HOST:$INPUT_DEPLOY_PATH"
+echo -e "${color_yellow}> Transfer files to destination folder${color_reset} \n rsync -rzh --delete --rsync-path="sudo rsync" -e="$SSH_COMMAND" --info=progress2 ./ $INPUT_DOCKER_HOST:$INPUT_DEPLOY_PATH"
 rsync -rzh --delete --rsync-path="sudo rsync" -e="$SSH_COMMAND" --info=progress2 ./ $INPUT_DOCKER_HOST:$INPUT_DEPLOY_PATH
 
 if ! [ -z "$INPUT_PRE_DEPLOY_COMMAND" ] ; then
