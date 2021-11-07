@@ -56,7 +56,7 @@ echo -e "${color_yellow}> Creating destination folder${color_reset}"
 execute_ssh "mkdir -p $INPUT_DEPLOY_PATH || true"
 
 echo -e "${color_yellow}> Transfer files to destination folder${color_reset}"
-rsync -rzh --delete --rsync-path="sudo rsync" -e="$SSH_COMMAND" --info=progress2 ./ "$INPUT_DOCKER_HOST":"$INPUT_DEPLOY_PATH"
+rsync -rzhp --delete --rsync-path="sudo rsync" -e="$SSH_COMMAND" --info=progress2 ./ "$INPUT_DOCKER_HOST":"$INPUT_DEPLOY_PATH"
 
 if ! [ -z "$INPUT_PRE_DEPLOY_COMMAND" ] ; then
   echo -e "${color_yellow}> Running pre-deploy command${color_reset}"
