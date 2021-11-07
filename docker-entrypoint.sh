@@ -60,16 +60,16 @@ rsync -rzh --delete --rsync-path="sudo rsync" -e="$SSH_COMMAND" --info=progress2
 
 if ! [ -z "$INPUT_PRE_DEPLOY_COMMAND" ] ; then
   echo -e "${color_yellow}> Running pre-deploy command${color_reset}"
-  execute_ssh "cd $INPUT_DEPLOY_PATH | $INPUT_PRE_DEPLOY_COMMAND" 2>&1
+  execute_ssh "cd $INPUT_DEPLOY_PATH && $INPUT_PRE_DEPLOY_COMMAND" 2>&1
 fi
 
 if ! [ -z "$INPUT_PULL_IMAGES" ] && [ $INPUT_PULL_IMAGES = 'true' ] ; then
   echo -e "${color_yellow}> Pulling images${color_reset}"
-  execute_ssh "cd $INPUT_DEPLOY_PATH | docker-compose -f $INPUT_DOCKER_COMPOSE_FILE pull" 2>&1
+  execute_ssh "cd $INPUT_DEPLOY_PATH && docker-compose -f ./$INPUT_DOCKER_COMPOSE_FILE pull" 2>&1
 fi
 
 echo -e "${color_yellow}> Deploy${color_reset}"
-execute_ssh "cd $INPUT_DEPLOY_PATH | docker-compose -f $INPUT_DOCKER_COMPOSE_FILE $INPUT_ARGS" 2>&1
+execute_ssh "cd $INPUT_DEPLOY_PATH && docker-compose -f ./$INPUT_DOCKER_COMPOSE_FILE $INPUT_ARGS" 2>&1
 
 
 
