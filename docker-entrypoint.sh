@@ -29,11 +29,11 @@ if [ -z "$INPUT_DEPLOY_PATH" ]; then
     exit 1
 fi
 
-SSH_COMMAND="ssh -q -t -i $HOME/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $INPUT_DOCKER_HOST"
+SSH_COMMAND="ssh -q -t -i $HOME/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 
 execute_ssh(){
   echo "$INPUT_DOCKER_HOST: $@"
-  $SSH_COMMAND "$@"
+  $SSH_COMMAND "$INPUT_DOCKER_HOST" "$@"
 }
 
 
@@ -56,7 +56,7 @@ echo -e "${color_yellow}> Creating destination folder${color_reset}"
 execute_ssh "mkdir -p $INPUT_DEPLOY_PATH || true"
 
 echo -e "${color_yellow}> Transfer files to destination folder${color_reset}"
-rsync -rzh --delete --rsync-path="sudo rsync" --info=progress2 ./ $INPUT_DOCKER_HOST:$INPUT_DEPLOY_PATH
+rsync -rzh --delete --rsync-path="sudo rsync" -e="$SSH_COMMAND" --info=progress2 ./ "$INPUT_DOCKER_HOST":"$INPUT_DEPLOY_PATH"
 
 if ! [ -z "$INPUT_PRE_DEPLOY_COMMAND" ] ; then
   echo -e "${color_yellow}> Running pre-deploy command${color_reset}"
