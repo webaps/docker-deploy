@@ -26,6 +26,9 @@ inputs:
   pull_images:
     description: Pull docker images before deploying.
     required: false
+  build_images:
+    description: Build docker images before deploying.
+    required: false
   docker_compose_file:
     description: Docker compose file to deploy
     required: false
