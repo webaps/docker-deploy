@@ -5,10 +5,10 @@ color_yellow='\033[33;1m'
 color_reset='\033[0m'
 
 execute_ssh(){
-  echo "$INPUT_REMOTE_DOCKER_HOST: $@"
+  echo "$INPUT_DOCKER_HOST: $@"
   ssh -q -t -i "$HOME/.ssh/id_rsa" \
       -o UserKnownHostsFile=/dev/null \
-      -o StrictHostKeyChecking=no "$INPUT_REMOTE_DOCKER_HOST" "$@"
+      -o StrictHostKeyChecking=no "$INPUT_DOCKER_HOST" "$@"
 }
 
 if [ -z "$INPUT_DOCKER_HOST" ]; then
@@ -38,7 +38,7 @@ fi
 
 
 # Setup SSH key
-SSH_HOST=${INPUT_REMOTE_DOCKER_HOST#*@}
+SSH_HOST=${INPUT_DOCKER_HOST#*@}
 
 echo -e "${color_yellow}> Registering SSH keys${color_reset}"
 
@@ -56,7 +56,7 @@ echo -e "${color_yellow}> Creating destination folder${color_reset}"
 execute_ssh "mkdir -p $INPUT_DEPLOY_PATH || true"
 
 echo -e "${color_yellow}> Transfer files to destination folder${color_reset}"
-rsync -rzh --delete --rsync-path="sudo rsync" --info=progress2 ./ $INPUT_REMOTE_DOCKER_HOST:$INPUT_DEPLOY_PATH
+rsync -rzh --delete --rsync-path="sudo rsync" --info=progress2 ./ $INPUT_DOCKER_HOST:$INPUT_DEPLOY_PATH
 
 if ! [ -z "$INPUT_PRE_DEPLOY_COMMAND" ] ; then
   echo -e "${color_yellow}> Running pre-deploy command${color_reset}"
