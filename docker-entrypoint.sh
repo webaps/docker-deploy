@@ -70,11 +70,11 @@ fi
 
 if ! [ -z "$INPUT_BUILD_IMAGES" ] && [ $INPUT_BUILD_IMAGES = 'true' ] ; then
   echo -e "${color_yellow}> Building images${color_reset}"
-  execute_ssh "cd $INPUT_DEPLOY_PATH && docker-compose -f ./$INPUT_DOCKER_COMPOSE_FILE build" 2>&1
+  execute_ssh "cd $INPUT_DEPLOY_PATH && docker-compose -f ./$INPUT_DOCKER_COMPOSE_FILE build --no-cache" 2>&1
 fi
 
 echo -e "${color_yellow}> Deploy${color_reset}"
-execute_ssh "cd $INPUT_DEPLOY_PATH && docker-compose -f ./$INPUT_DOCKER_COMPOSE_FILE $INPUT_ARGS" 2>&1
+execute_ssh "cd $INPUT_DEPLOY_PATH && docker-compose -f ./$INPUT_DOCKER_COMPOSE_FILE $INPUT_ARGS --force-recreate --remove-orphans" 2>&1
 
 
 
