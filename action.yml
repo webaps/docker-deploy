@@ -14,6 +14,9 @@ inputs:
   ssh_public_host_key:
     description: SSH private key used to connect to the docker host
     required: true
+  deployment_mode:
+    description: Deployment mode either docker-swarm or docker-compose. Default is docker-compose.
+    required: false
   args:
     description: Deployment command arguments (docker-compose ...)
     required: true
@@ -29,8 +32,8 @@ inputs:
   build_images:
     description: Build docker images before deploying.
     required: false
-  docker_compose_file:
-    description: Docker compose file to deploy
+  stack_file_name:
+    description: Stack file to deploy
     required: false
     default: docker-compose.yml
 
