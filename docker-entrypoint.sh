@@ -5,7 +5,7 @@ color_yellow='\033[33;1m'
 color_reset='\033[0m'
 
 echo "ENV:"
-printf '%s\n' "$(xargs < "$GITHUB_ENV")"
+cat "$GITHUB_ENV"
 
 if [ -z "$INPUT_DOCKER_HOST" ]; then
     echo "Input docker_host is required!"
