@@ -4,6 +4,8 @@ set -eu
 color_yellow='\033[33;1m'
 color_reset='\033[0m'
 
+echo -e "$GITHUB_ENV"
+
 if [ -z "$INPUT_DOCKER_HOST" ]; then
     echo "Input docker_host is required!"
     exit 1
