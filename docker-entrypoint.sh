@@ -84,7 +84,7 @@ echo -e "${color_yellow}> Deploy${color_reset}"
 
 case $INPUT_DEPLOYMENT_MODE in
   docker-swarm)
-    execute_ssh "export $(cat "$GITHUB_ENV" | xargs) && cd $INPUT_DEPLOY_PATH && docker stack deploy $INPUT_ARGS --compose-file $INPUT_STACK_FILE_NAME" 2>&1
+    execute_ssh "export $(xargs < "$GITHUB_ENV") && cd $INPUT_DEPLOY_PATH && docker stack deploy $INPUT_ARGS --compose-file $INPUT_STACK_FILE_NAME" 2>&1
   ;;
 
   *)
