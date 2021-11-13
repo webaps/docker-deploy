@@ -36,6 +36,9 @@ inputs:
     description: Stack file to deploy
     required: false
     default: docker-compose.yml
+  dotenv:
+    description: Specify the dotenv file to use
+    required: false
 
 runs:
   using: docker

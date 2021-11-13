@@ -4,8 +4,6 @@ set -eu
 color_yellow='\033[33;1m'
 color_reset='\033[0m'
 
-env | grep -v "^GITHUB_\|INPUT_\|RUNNER_\|OS=\|HOME=\|ACTIONS_\|PATH=\|DOCKER_"
-
 if [ -z "$INPUT_DOCKER_HOST" ]; then
     echo "Input docker_host is required!"
     exit 1
@@ -84,7 +82,11 @@ echo -e "${color_yellow}> Deploy${color_reset}"
 
 case $INPUT_DEPLOYMENT_MODE in
   docker-swarm)
-    execute_ssh "export $(xargs < "$GITHUB_ENV") && cd $INPUT_DEPLOY_PATH && docker stack deploy $INPUT_ARGS --compose-file $INPUT_STACK_FILE_NAME" 2>&1
+    if [ -n "$INPUT_DOTENV" ] ; then
+      execute_ssh "cd $INPUT_DEPLOY_PATH && env $(xargs -a "$INPUT_DOTENV") docker stack deploy $INPUT_ARGS --compose-file $INPUT_STACK_FILE_NAME" 2>&1
+    else
+      execute_ssh "cd $INPUT_DEPLOY_PATH && docker stack deploy $INPUT_ARGS --compose-file $INPUT_STACK_FILE_NAME" 2>&1
+    fi
   ;;
 
   *)
