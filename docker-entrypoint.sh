@@ -4,8 +4,8 @@ set -eu
 color_yellow='\033[33;1m'
 color_reset='\033[0m'
 
-
-xargs < $GITHUB_ENV 2>&1
+echo "ENV:"
+printf '%s\n' "$(xargs < "$GITHUB_ENV")"
 
 if [ -z "$INPUT_DOCKER_HOST" ]; then
     echo "Input docker_host is required!"
@@ -52,7 +52,7 @@ echo -e "${color_yellow}> Registering SSH keys${color_reset}"
 mkdir -p "$HOME/.ssh"
 printf '%s\n' "$INPUT_SSH_PRIVATE_KEY" > "$HOME/.ssh/id_rsa"
 chmod 600 "$HOME/.ssh/id_rsa"
-eval $(ssh-agent)
+eval "$(ssh-agent)"
 ssh-add "$HOME/.ssh/id_rsa"
 
 echo -e "${color_yellow}> Add known hosts${color_reset}"
