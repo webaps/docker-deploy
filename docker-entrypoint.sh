@@ -83,7 +83,7 @@ echo -e "${color_yellow}> Deploy${color_reset}"
 case $INPUT_DEPLOYMENT_MODE in
   docker-swarm)
     if [ -n "$INPUT_DOTENV" ] ; then
-      execute_ssh "cd $INPUT_DEPLOY_PATH && env $(xargs -a "$INPUT_DOTENV") docker stack deploy $INPUT_ARGS --compose-file $INPUT_STACK_FILE_NAME" 2>&1
+      execute_ssh "cd $INPUT_DEPLOY_PATH && env $(xargs -a $INPUT_DOTENV) docker stack deploy $INPUT_ARGS --compose-file $INPUT_STACK_FILE_NAME" 2>&1
     else
       execute_ssh "cd $INPUT_DEPLOY_PATH && docker stack deploy $INPUT_ARGS --compose-file $INPUT_STACK_FILE_NAME" 2>&1
     fi
